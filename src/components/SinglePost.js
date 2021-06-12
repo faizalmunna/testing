@@ -5,7 +5,7 @@ const SinglePost = ({ rest, id }) => {
   // function handleClick() {
   //   history.push(`/${rest._id}`);
   // }
-  console.log(rest);
+  // console.log(rest);
   return (
     <Link to={`/details/${id}`}>
       <div className="post">

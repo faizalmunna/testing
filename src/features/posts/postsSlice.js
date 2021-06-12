@@ -26,6 +26,11 @@ export const fetchAllPostsAsync = createAsyncThunk(
   }
 );
 
+export const postsingleAsync = createAsyncThunk(
+  "posts/postsingleAsync",
+  async (post) => await axios.post(`http://localhost:5000/posts/addpost`, post)
+);
+
 export const postsSlice = createSlice({
   name: "posts",
   initialState: {
@@ -38,6 +43,9 @@ export const postsSlice = createSlice({
   reducers: {
     selectedpost: (state, action) => {
       state.selectedPost = action.payload;
+    },
+    createPost: (state, action) => {
+      state.allposts = [...state.allposts, action.payload];
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -55,6 +63,17 @@ export const postsSlice = createSlice({
     builder.addCase(fetchAllPostsAsync.rejected, (state, action) => {
       state.allposts = "data not loaded";
       state.loading = "error";
+      state.error = action.error.message;
+    });
+    builder.addCase(postsingleAsync.pending, (state, action) => {
+      state.allposts = [];
+    });
+    builder.addCase(postsingleAsync.fulfilled, (state, action) => {
+      state.allposts.unshift(action.payload.data);
+      state.loading = "loaded";
+    });
+
+    builder.addCase(postsingleAsync.rejected, (state, action) => {
       state.error = action.error.message;
     });
   },
@@ -75,5 +94,5 @@ export const postsSlice = createSlice({
 //   (state) => state
 // );
 
-export const { selectedpost } = postsSlice.actions;
+export const { selectedpost, createPost } = postsSlice.actions;
 export default postsSlice.reducer;
