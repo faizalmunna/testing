@@ -12,12 +12,7 @@ const AddPost = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      createPost({
-        title: formdata.title,
-        message: formdata.message,
-      })
-    );
+    dispatch(createPost(formdata));
     setFormData({});
   };
   return (

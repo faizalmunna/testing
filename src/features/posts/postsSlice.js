@@ -28,6 +28,7 @@ export const fetchAllPostsAsync = createAsyncThunk(
 
 export const postsingleAsync = createAsyncThunk(
   "posts/postsingleAsync",
+
   async (post) => await axios.post(`http://localhost:5000/posts/addpost`, post)
 );
 
