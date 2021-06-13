@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createPost } from "../features/posts/postsSlice";
+import { createPost, postsingleAsync } from "../features/posts/postsSlice";
 const AddPost = () => {
   const dispatch = useDispatch();
   const [formdata, setFormData] = useState({
@@ -12,8 +12,13 @@ const AddPost = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createPost(formdata));
-    setFormData({});
+    dispatch(postsingleAsync(formdata));
+    setFormData({
+      title: "",
+      message: "",
+      _id: "",
+      date: "",
+    });
   };
   return (
     <div>
@@ -21,7 +26,7 @@ const AddPost = () => {
         <input
           placeholder="title"
           type="text"
-          value={formdata.name}
+          value={formdata.title}
           onChange={(e) => setFormData({ ...formdata, title: e.target.value })}
         />
         <input

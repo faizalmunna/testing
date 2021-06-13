@@ -28,8 +28,10 @@ export const fetchAllPostsAsync = createAsyncThunk(
 
 export const postsingleAsync = createAsyncThunk(
   "posts/postsingleAsync",
-
-  async (post) => await axios.post(`http://localhost:5000/posts/addpost`, post)
+  async (post, { dispatch }) => {
+    const response = await axios.post(`http://localhost:5000/posts/`, post);
+    return response.data;
+  }
 );
 
 export const postsSlice = createSlice({
@@ -44,9 +46,6 @@ export const postsSlice = createSlice({
   reducers: {
     selectedpost: (state, action) => {
       state.selectedPost = action.payload;
-    },
-    createPost: (state, action) => {
-      state.allposts = [...state.allposts, action.payload];
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -66,16 +65,10 @@ export const postsSlice = createSlice({
       state.loading = "error";
       state.error = action.error.message;
     });
-    builder.addCase(postsingleAsync.pending, (state, action) => {
-      state.allposts = [];
-    });
-    builder.addCase(postsingleAsync.fulfilled, (state, action) => {
-      state.allposts.unshift(action.payload.data);
-      state.loading = "loaded";
-    });
 
-    builder.addCase(postsingleAsync.rejected, (state, action) => {
-      state.error = action.error.message;
+    builder.addCase(postsingleAsync.fulfilled, (state, action) => {
+      // state.allposts.unshift(action.payload.data);
+      state.allposts = [...state.allposts, action.payload];
     });
   },
 });
